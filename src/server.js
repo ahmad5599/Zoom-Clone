@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import http from "http";
-import { WebSocketServer } from "ws";
+import { WebSocketServer } from "ws"; // this is the new way due to an upgrade
 
 const app = express();
 const __dirname = path.resolve();
@@ -12,16 +12,20 @@ app.use("/public", express.static(__dirname + "/src/public"));
 app.get("/", (req, res) => res.render("home"));
 app.get("/*", (req, res) => res.redirect("/"));
 
-const handleListen = () => console.log(`Listening on http://localhost:2000`);
+const server = http.createServer(app); //create a server
+const wss = new WebSocketServer({ server }); //create a websocket server
 
-const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+const sockets = []; //array of users i.e. sockets
 
-const sockets = [];
+server.listen(2000, () => {
+  console.log(`Listening on http://localhost:2000`);
+});
 
 wss.on("connection", (socket) => {
   sockets.push(socket);
-  console.log("connected to the browser✅");
+  socket.on("open", () => {
+    console.log("Connected to server✅");
+  });
   socket.on("close", () => {
     console.log("Disconnected from browser❌");
   });
@@ -30,5 +34,3 @@ wss.on("connection", (socket) => {
     sockets.forEach((aSocket) => aSocket.send(message.toString("utf8")));
   });
 });
-
-server.listen(2000, handleListen);
