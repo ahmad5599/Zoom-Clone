@@ -1,5 +1,5 @@
 import express from "express";
-import path from "path";
+import path, { parse } from "path";
 import http from "http";
 import { WebSocketServer } from "ws"; // this is the new way due to an upgrade
 
@@ -23,14 +23,23 @@ server.listen(2000, () => {
 
 wss.on("connection", (socket) => {
   sockets.push(socket);
-  socket.on("open", () => {
-    console.log("Connected to server✅");
-  });
+  socket["nickname"] = "Annon";
+
+  console.log("Connected to server✅");
   socket.on("close", () => {
     console.log("Disconnected from browser❌");
   });
-  socket.on("message", (message) => {
-    console.log(message.toString("utf8"));
-    sockets.forEach((aSocket) => aSocket.send(message.toString("utf8")));
+  socket.on("message", (msg) => {
+    const parsed = JSON.parse(msg);
+    switch (parsed.type) {
+      case "new_message":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket["nickname"]}: ${parsed.payload}`)
+        );
+        break;
+      case "nickname":
+        socket["nickname"] = parsed.payload;
+        break;
+    }
   });
 });

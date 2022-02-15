@@ -23,7 +23,7 @@ socket.addEventListener("message", (message) => {
 messageForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const message_input = messageForm.querySelector("input").value;
-  socket.send(makeMessage("message", message_input));
+  socket.send(makeMessage("new_message", message_input));
   messageForm.querySelector("input").value = "";
 });
 nicknameForm.addEventListener("submit", (event) => {
@@ -31,4 +31,6 @@ nicknameForm.addEventListener("submit", (event) => {
   const nickname_input = nicknameForm.querySelector("input").value;
   socket.send(makeMessage("nickname", nickname_input));
   nicknameForm.querySelector("input").value = "";
+
+  console.log(`current userName : ${nickname_input}`);
 });
