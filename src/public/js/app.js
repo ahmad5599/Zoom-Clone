@@ -22,13 +22,13 @@ socket.addEventListener("message", (message) => {
 
 messageForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const message_input = messageForm.querySelector("input").value;
+  let message_input = messageForm.querySelector("input").value;
   socket.send(makeMessage("new_message", message_input));
   messageForm.querySelector("input").value = "";
 });
 nicknameForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const nickname_input = nicknameForm.querySelector("input").value;
+  let nickname_input = nicknameForm.querySelector("input").value;
   socket.send(makeMessage("nickname", nickname_input));
   nicknameForm.querySelector("input").value = "";
 
