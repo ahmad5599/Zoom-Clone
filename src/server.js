@@ -34,7 +34,7 @@ wss.on("connection", (socket) => {
     switch (parsed.type) {
       case "new_message":
         sockets.forEach((aSocket) =>
-          aSocket.send(`${socket["nickname"]}: ${parsed.payload}`)
+          aSocket.send(`${socket.nickname}: ${parsed.payload}`)
         );
         break;
       case "nickname":
