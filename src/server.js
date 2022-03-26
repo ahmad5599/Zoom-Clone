@@ -2,7 +2,6 @@ import express from "express";
 import path, { parse } from "path";
 import http from "http";
 import { Server } from "socket.io";
-// import { WebSocketServer } from "ws"; // this is the new way due to an upgrade
 
 const app = express();
 const __dirname = path.resolve();
@@ -14,8 +13,18 @@ app.get("/", (req, res) => res.render("home"));
 app.get("/*", (req, res) => res.redirect("/"));
 
 const httpServer = http.createServer(app); //create a server
-const wsServer = new Server(httpServer);
-// const wss = new WebSocketServer({ server }); //create a websocket server
+const wsServer = new Server(httpServer); //create a websocket server using socket.io framework
+
+wsServer.on("connection", (socket) => {
+  socket.onAny((event) => {
+    console.log(`Socket Event:${event}`);
+  });
+  socket.on("enter_room", (roomName, done) => {
+    socket.join(roomName);
+    done();
+    socket.to(roomName).emit("welcome");
+  });
+});
 
 // const sockets = []; //array of users i.e. sockets
 
