@@ -22,7 +22,7 @@ socket.addEventListener("message", (message) => {
 
 messageForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  let message_input = messageForm.querySelector("input").value;
+  const message_input = messageForm.querySelector("input").value;
   socket.send(makeMessage("new_message", message_input));
   messageForm.querySelector("input").value = "";
 });
