@@ -17,6 +17,7 @@ const wsServer = new Server(httpServer); //create a websocket server using socke
 
 wsServer.on("connection", (socket) => {
   socket.onAny((event) => {
+<<<<<<< HEAD
     console.log(`Socket Event:${event}`);
   });
   socket.on("enter_room", (roomName, done) => {
