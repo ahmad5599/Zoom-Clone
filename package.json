@@ -1,5 +1,10 @@
 {
+<<<<<<< HEAD
   "name": "noom",
+=======
+  "type": "module",
+  "name": "woom",
+>>>>>>> b4ecb37600b7158958d661cf1cbe2d778005c411
   "version": "1.0.0",
   "description": "Zoom Clone using NodeJS, WebRTC and Websockets.",
   "license": "MIT",
@@ -16,6 +21,11 @@
   "dependencies": {
     "express": "^4.17.1",
     "pug": "^3.0.2",
+<<<<<<< HEAD
     "ws": "^7.5.3"
+=======
+    "socket.io": "^4.4.1",
+    "ws": "^8.4.2"
+>>>>>>> b4ecb37600b7158958d661cf1cbe2d778005c411
   }
 }
