@@ -1,5 +1,5 @@
 import express from "express";
-import path from "path";
+import path, { parse } from "path";
 import http from "http";
 import { WebSocketServer } from "ws"; // this is the new way due to an upgrade
 
@@ -17,20 +17,29 @@ const wss = new WebSocketServer({ server }); //create a websocket server
 
 const sockets = []; //array of users i.e. sockets
 
-server.listen(2000, () => {
-  console.log(`Listening on http://localhost:2000`);
-});
+const handleListen = () => console.log(`Listening on http://localhost:3000`);
+
+server.listen(3000, handleListen);
 
 wss.on("connection", (socket) => {
   sockets.push(socket);
-  socket.on("open", () => {
-    console.log("Connected to server✅");
-  });
+  socket["nickname"] = "Annon";
+
+  console.log("connected to browser✅");
   socket.on("close", () => {
-    console.log("Disconnected from browser❌");
+    console.log("disconnected from brower❌");
   });
-  socket.on("message", (message) => {
-    console.log(message.toString("utf8"));
-    sockets.forEach((aSocket) => aSocket.send(message.toString("utf8")));
+  socket.on("message", (msg) => {
+    const parsed = JSON.parse(msg);
+    switch (parsed.type) {
+      case "new_message":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket["nickname"]}: ${parsed.payload}`)
+        );
+        break;
+      case "nickname":
+        socket["nickname"] = parsed.payload;
+        break;
+    }
   });
 });
